@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME=''
+    }
+
+    stages {
+        stage('Clone configuration repository') {
+            steps {
+                checkout([$class: 'GitSCM', 
+                          branches: [[name: '*/master']], 
+                          userRemoteConfigs: [[url: 'https://github.com/YashTiwarii/spe_deploy.git']]])
+            }
+        }
+
+        stage('Build and push frontend image') {
+            steps {
+                checkout([$class: 'GitSCM', 
+                          branches: [[name: '*/main']], 
+                          userRemoteConfigs: [[url: 'https://github.com/YashTiwarii/SPE_MAJOR_FRONTEND.git']]])
+
+                script {
+                    IMAGE_NAME=docker.build "yashtiwarii/spe_frontend"
+                    docker.withRegistry('','keytiwari'){
+                      IMAGE_NAME.push()
+                    }
+                }
+            }
+        }
+
+        stage('Build and push backend image') {
+            steps {
+                checkout([$class: 'GitSCM', 
+                          branches: [[name: '*/main']], 
+                          userRemoteConfigs: [[url: 'https://github.com/YashTiwarii/SPE_MAJOR_BACKEND.git']]])
+
+                script {
+                    IMAGE_NAME=docker.build "yashtiwarii/spe_backend"
+                    docker.withRegistry('','keytiwari'){
+                      IMAGE_NAME.push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy application using Ansible') {
+            steps {
+                sh "cd ansible && ansible-playbook -i inventory deploy.yml"
+            }
+        }
+    }
+}
