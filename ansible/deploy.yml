@@ -1,0 +1,9 @@
+---
+- name: Deploy MADMUSCLE to minikube
+  hosts: all
+  tasks:
+    - name: apply backend
+      shell: kubectl apply -f /home/yash/Documents/MadMuscle/Deployment/kubernetes/backend.yml
+
+    - name: apply frontend
+      shell: kubectl apply -f /home/yash/Documents/MadMuscle/Deployment/kubernetes/frontend.yml

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workout-frontend-deployment
+  labels:
+    app: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: yashtiwarii/spe_frontend:v1
+          ports:
+            - containerPort: 2004
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      # nodePort: 30000
