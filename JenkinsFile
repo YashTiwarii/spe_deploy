@@ -36,7 +36,7 @@ pipeline {
                           userRemoteConfigs: [[url: 'https://github.com/YashTiwarii/SPE_MAJOR_BACKEND.git']]])
 
                 script {
-                    IMAGE_NAME=docker.build "yashtiwarii/spe_backend"
+                    IMAGE_NAME=docker.build ""
                     docker.withRegistry('','keytiwari'){
                       IMAGE_NAME.push()
                     }
@@ -46,7 +46,7 @@ pipeline {
 
         stage('Deploy application using Ansible') {
             steps {
-                sh "cd ansible && ansible-playbook -i inventory deploy.yml"
+                sh "ansible-playbook -i /home/yash/Documents/MadMuscle/Deployment/ansible/inventory /home/yash/Documents/MadMuscle/Deployment/ansible/deploy.yml"
             }
         }
     }

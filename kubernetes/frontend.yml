@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: yashtiwarii/spe_frontend:v1
+          image: yashtiwarii/spe_frontend
           ports:
             - containerPort: 2004
 ---
