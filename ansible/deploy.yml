@@ -2,6 +2,12 @@
 - name: Deploy MADMUSCLE to minikube
   hosts: all
   tasks:
+    - name: delete previous frontend deployment
+      shell: kubectl delete -f /home/yash/Documents/MadMuscle/Deployment/kubernetes/frontend.yml
+
+    - name: delete previous backend deployment
+      shell: kubectl delete -f /home/yash/Documents/MadMuscle/Deployment/kubernetes/backend.yml
+
     - name: apply backend
       shell: kubectl apply -f /home/yash/Documents/MadMuscle/Deployment/kubernetes/backend.yml
 
